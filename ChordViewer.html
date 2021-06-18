@@ -1,0 +1,19 @@
+<head>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="node_modules/page-flip/dist/js/page-flip.browser.js"></script>
+    <link rel="stylesheet" href="css/fakebook.css" type="text/css">
+    <script src="https://kit.fontawesome.com/7ec0c78a02.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <script src="js/fakebook.js"></script>
+    <textarea id="drop_zone" 
+        ondrop="dropHandler(event);" 
+        ondragover="dragOverHandler(event);"
+        onkeyup="loadSheet(this.innerHTML);">
+    Drag .tab's,.crd's,or .txt's here!
+    </textarea>
+    <div id="lead-sheet-container">
+        <div class="chords"></div>
+    </div>
+</body>

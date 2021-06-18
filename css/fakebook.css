@@ -1,0 +1,60 @@
+
+    @font-face {
+        font-family: LINLIBERTINE_M;
+        src: url("../fonts/LINLIBERTINE_M.OTF") format("opentype");
+    }
+    
+    @font-face {
+        font-family: LINLIBERTINE_M;
+        font-weight: bold;
+        src: url("../fonts/LINLIBERTINE_M.OTF") format("opentype");
+    }
+    
+    @font-face {
+        font-family: JAZZTEXTREGULAR;
+        src: url("../fonts/JAZZTEXTREGULAR.TTF") format("truetype");
+    }
+    
+    @font-face {
+        font-family: JAZZTEXTREGULAR;
+        font-weight: bold;
+        src: url("../fonts/JAZZTEXTREGULAR.TTF") format("truetype");
+    }
+    #drop_zone {
+        border: 5px dashed blue;
+    }
+    
+    textarea#drop_zone.hidden{
+        display:none;
+        
+    }
+    textarea#drop_zone{
+        width:50%;
+        height:100%;
+        resize:none;
+    }
+    div.chord-sheet {
+        font-family: "LINLIBERTINE_M";
+        background-color: white;   
+        font-size: small;
+
+        width:50%;
+        break-inside: avoid;
+    }
+    @media print{
+        button#edit{display:none;}
+        div.chord-sheet{
+            /* width:100%; */
+        }
+    }
+    div.chords{
+    }
+    h1 {
+        text-align:center;
+    }
+    span.jazztext-font, h1 {
+        font-family: "JAZZTEXTREGULAR";
+    }
+   
+ 
+  
