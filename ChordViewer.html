@@ -2,18 +2,30 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="node_modules/page-flip/dist/js/page-flip.browser.js"></script>
-    <link rel="stylesheet" href="css/fakebook.css" type="text/css">
     <script src="https://kit.fontawesome.com/7ec0c78a02.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://groovymysterioso.github.io/FakeBooker/css/fakebook.css" type="text/css">
 </head>
+
 <body>
     <script src="js/fakebook.js"></script>
+    <nav>
+        <button id="edit" onclick="showEditor();" ><i class="fas fa-edit" ></i></button>
+        <button onclick="download();"><i class="fas fa-download"></i></button>
+        <button onclick="downloadHTML();"><i class="fas fa-html5"></i></button>
+        <button id="print" onclick=""><i class="fas fa-print"></i></button>
+    </nav>
     <textarea id="drop_zone" 
         ondrop="dropHandler(event);" 
         ondragover="dragOverHandler(event);"
         onkeyup="loadSheet(this.innerHTML);">
-    Drag .tab's,.crd's,or .txt's here!
+        Drag .tab's,.crd's,or .txt's here!
     </textarea>
+   
     <div id="lead-sheet-container">
-        <div class="chords"></div>
+        <div class='chord-sheet w3-panel w3-card-4' name='template'>
+            
+            <pre class="chords"></pre>
+        </div>
     </div>
 </body>

@@ -1,8 +1,30 @@
-//rules for lead sheet:
-//First line is Title - Artist
-//All sections divided into 'blocks' delimited by empty lines
-//No block gets split between pages
 var pageHeight = 10;
+var page = null;
+class Song {
+    
+    constructor(fileName,data)
+    {
+        this.fileName=fileName;this.data=data;
+        this.songBlocks= (data.toString());
+    }
+    toHTML()
+    {
+        return data.replaceAll(/\n\r|\n|\r/,"<br />")
+        .replaceAll("   ", "&nbsp;&nbsp;&nbsp;");
+    }
+    toSheets(){
+        return chordify(data);
+    
+    }
+    toString(){return this.data;}
+    get Title(){return this.data.split(/\n/)[0];}
+    get SongBlocks(){
+        return this.data.split(/(\r\n\r\n)/g);
+    }
+    get ChordSummary(){var songLines = data.split(/\n/)}
+ 
+
+}
 
 String.prototype.replaceAll = function (search, replacement) {
     var target = this;
@@ -10,27 +32,15 @@ String.prototype.replaceAll = function (search, replacement) {
 };
 
 
+function chordify(input) {
 
-function chordify() {
+    const rawReg = /\b([CDEFGAB](?:b|bb)*(?:#|##|sus|maj|min|aug|m|sus2)*[\d\/]*(?:[CDEFGAB](?:b|bb)*(?:#|##|sus|maj|min|aug|m|sus2)*[\d\/]*)*)(?=\s|$)(?! \w)/;
+    const chordReg = "<span class='jazztext-font'>$1</span>";
 
-    var input = document.getElementsByClassName("chords");
-    for (var i = 0; i < input.length; i++) {
-        const rawReg = /\b([CDEFGAB](?:b|bb)*(?:#|##|sus|maj|min|aug|m|sus2)*[\d\/]*(?:[CDEFGAB](?:b|bb)*(?:#|##|sus|maj|min|aug|m|sus2)*[\d\/]*)*)(?=\s|$)(?! \w)/;
-        const chordReg = "<span class='jazztext-font'>$1</span>";
-
-        let output = input[i].innerHTML.replaceAll("-", "&mdash;");
-        output = output.replaceAll(rawReg, chordReg).replaceAll("\n", "<br />").replaceAll("   ", "&nbsp;&nbsp;&nbsp;");
-        input[i].innerHTML = output;
-    }
+    return  input.toString().replaceAll(rawReg, chordReg);
 }
+function tabify(songText){return songText.replaceAll("-", "&mdash;")}
 
-function showEditor() {
-    document.getElementById("drop_zone").classList.remove("hidden");
-}
-
-function dragOverHandler(ev) {
-    ev.preventDefault();
-}
 
 function dropHandler(evt) {
     evt.stopPropagation();
@@ -49,54 +59,61 @@ function dropHandler(evt) {
 
 }
 
-function getLinesInBlock(block) {
-    console.log(block.split(/\r\n|\r|\n/).length);
-    console.log(block);
+
+
+function getLinesInBlock(block)
+{
     return block.split(/\r\n|\r|\n/).length;
 }
-
 
 function loadSheet(response) {
     var pageLength = 0;
 
-    $('#lead-sheet-container').text('');
-    var songArray = response.replace(/\n\n/g, "\r\n\r\n").split(/\r\n\r\n/);
-    var htmlResponse = "";
-    htmlResponse = htmlResponse + "<div class='chord-sheet'>";
-    htmlResponse = htmlResponse + '<h1>' + songArray[0] + '<button id="edit" onclick="showEditor();" ><i class="fas fa-edit"></i></button></h1>';
-    htmlResponse = htmlResponse + "<div class='chords'>";
+    var ourSong = new Song("farts.crd",response);
+    
+    var template = $("div.chord-sheet[name=template]");
 
-    for (var i = 1; i < songArray.length; i++) {
-        songChunk = songArray[i].replace(/\n/, "<br />")
+    var ourPage = $(template).clone().appendTo("div#lead-sheet-container");
+    for (var i = 0; i < ourSong.SongBlocks.length;i++){//songArray.length; i++) {
+        
+
+        
         if (pageLength > pageHeight) // end of block
         {
-
-            pageLength = getLinesInBlock(songArray[i]);;
-            htmlResponse = htmlResponse + "</div></div><div class='chord-sheet'><div class='chords'>" + songChunk + "<br /><br />";
+            ourPage = $(template).clone().appendTo("div#lead-sheet-container");
+            pageLength = getLinesInBlock(ourSong.SongBlocks[i]);;
         }
         else {
-
-            pageLength = pageLength + getLinesInBlock(songChunk);
-            htmlResponse = htmlResponse + songArray[i] + "<br /><br />";
-
+            pageLength = pageLength + getLinesInBlock(ourSong.SongBlocks[i]);
         }
+        $(ourPage).find(".chords").append( chordify(ourSong.SongBlocks[i].toString()));
+        var replacementTitle = "<h1>" +ourSong.Title +"</h1>";
+        console.log(replacementTitle);
+        
+        $(template).remove();
     }
+    $("div#lead-sheet-container").html( $("div#lead-sheet-container").html().replace(ourSong.Title, replacementTitle ));
     
-    $('#lead-sheet-container').append(htmlResponse);
 
     var pages = document.querySelectorAll('.chord-sheet');
 
-    const pageFlip = new St.PageFlip(document.getElementById('lead-sheet-container'),
+    pageFlip = new St.PageFlip(document.getElementById('lead-sheet-container'),
         {
             width: 600, // required parameter - base page width
-            height: 1200,  // required parameter - base page height
+            height: 800,  // required parameter - base page height
             size: "stretch",
             flippingTime: 200,
 
         }
     );
+    $("button#print").on("click",function(){
 
-    chordify();
+        pageFlip.destroy();
+        window.print();
+    });
+    
+    $('#song-title').innerHTML = ourSong.Title;
+
     pageFlip.loadFromHTML(pages);
     $(".chord-sheet").keydown(function (event) {
 
@@ -113,15 +130,52 @@ function loadSheet(response) {
         });
 }
 
+function showEditor() {
+    $("#drop_zone").toggle();
+}
+
+function dragOverHandler(ev) {
+    ev.preventDefault();
+}
+
+function download() {
+    text = $("textarea").val();
+    filename = text.split("/n/n")[0] + ".crd";
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+  
+    element.style.display = 'none';
+    document.body.appendChild(element);
+  
+    element.click();
+  
+    document.body.removeChild(element);
+  }
+  function downloadHTML() {
+
+    text = document.getElementsByTagName("html")[0].innerHTML;
+
+    filename = $("textarea").val().split("\n\n")[0];
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+  
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    
+    element.click();
+    
+    document.body.removeChild(element);
+  }
 $().ready(function () {
 
     $().keydown(function (event) {
 
-        if ((event.keyCode == 13) && ($(event.target)[0] != $("textarea")[0])) {
-            event.preventDefault();
-            return false;
-        }
-
-      
+            if ((event.keyCode == 13) && ($(event.target)[0] != $("textarea")[0])) {
+                event.preventDefault();
+                return false;
+            }
         });
     });
+    
