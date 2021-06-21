@@ -1,6 +1,29 @@
 # Fakebooker
-######a tool for beautifying, and viewing leadsheet and tablatures for printing, online, and offline use.
+###### a tool for beautifying, and viewing leadsheet and tablatures for printing, online, and offline use.
+### Turns this:
 
+>Battle Hymn Of The Republic
+>
+>[Verse 1]
+>     G                               G7            G7/B
+>Mine eyes have seen the glory of the coming of the Lord;
+>      C                                   G                   D7
+>He is trampling out the vintage where the grapes of wrath are stored;
+>        G                  G7               B7              Em
+>He hath loosed the fateful lightning of His terrible, swift sword; 
+>    Am       D4  D     G
+>His truth is mar-ching on.
+>
+>
+>[Chorus]
+>G                   G7  G7/B   C      C7          G  G7
+>Glory! Glory! halle-lu- jah!   Glory! Glory! hallelu-jah!
+>G      G7/F         B7/D#  Em       Am       D4  D     G
+>Glory! Glory! halle- lu - jah!  His truth is mar-ching on.
+
+### Into this:
+
+![Rough example](Example.png "Example")
 # Features
 * Beautification
   * Chords presented in familiar Jazz Fakebook style font.
