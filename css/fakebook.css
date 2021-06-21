@@ -28,7 +28,7 @@
         display:none;
         
     }
-    textarea#drop_zone{
+    textarea#editor{
         width:50%;
         height:100%;
         resize:none;

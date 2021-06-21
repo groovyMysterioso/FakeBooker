@@ -25,6 +25,7 @@ class Song {
  
 
 }
+const screenshotTarget = document.body;
 
 String.prototype.replaceAll = function (search, replacement) {
     var target = this;
@@ -49,11 +50,11 @@ function dropHandler(evt) {
     var files = evt.dataTransfer.files; // FileList object.
     var reader = new FileReader();
     reader.onload = function (evt) {
-        document.getElementById('drop_zone').innerHTML = evt.target.result;
-        document.getElementById('drop_zone').value = evt.target.result;
+        document.getElementById('editor').innerHTML = evt.target.result;
+        document.getElementById('editor').value = evt.target.result;
 
         loadSheet(evt.target.result);
-        document.getElementById('drop_zone').classList.add("hidden");
+        document.getElementById('drop_zone').classList.add("w3-hide");
     }
     reader.readAsText(files[0], "UTF-8");
 
@@ -131,7 +132,7 @@ function loadSheet(response) {
 }
 
 function showEditor() {
-    $("#drop_zone").toggle();
+    $("#editor").toggleClass("w3-hide");
 }
 
 function dragOverHandler(ev) {
