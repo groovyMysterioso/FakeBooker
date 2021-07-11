@@ -1,4 +1,4 @@
-var pageHeight = 10;
+var pageHeight = 40;
 var page = null;
 class Song {
     
@@ -40,7 +40,14 @@ function chordify(input) {
 
     return  input.toString().replaceAll(rawReg, chordReg);
 }
-function tabify(songText){return songText.replaceAll("-", "&mdash;")}
+function tabify(songText){
+    var firstReplace = songText.replaceAll("|","&#9473;");
+    var secondReplace =songText.replaceAll("-", "&#9473;");
+    console.log(firstReplace);
+    console.log(secondReplace);
+    return secondReplace;
+}
+
 
 
 function dropHandler(evt) {
@@ -77,8 +84,6 @@ function loadSheet(response) {
     var ourPage = $(template).clone().appendTo("div#lead-sheet-container");
     for (var i = 0; i < ourSong.SongBlocks.length;i++){//songArray.length; i++) {
         
-
-        
         if (pageLength > pageHeight) // end of block
         {
             ourPage = $(template).clone().appendTo("div#lead-sheet-container");
@@ -87,14 +92,13 @@ function loadSheet(response) {
         else {
             pageLength = pageLength + getLinesInBlock(ourSong.SongBlocks[i]);
         }
-        $(ourPage).find(".chords").append( chordify(ourSong.SongBlocks[i].toString()));
+        $(ourPage).find(".chords").append( chordify(tabify(ourSong.SongBlocks[i].toString())));
         var replacementTitle = "<h1>" +ourSong.Title +"</h1>";
         console.log(replacementTitle);
         
         $(template).remove();
     }
     $("div#lead-sheet-container").html( $("div#lead-sheet-container").html().replace(ourSong.Title, replacementTitle ));
-    
 
     var pages = document.querySelectorAll('.chord-sheet');
 
@@ -104,18 +108,19 @@ function loadSheet(response) {
             height: 800,  // required parameter - base page height
             size: "stretch",
             flippingTime: 200,
-
         }
     );
     $("button#print").on("click",function(){
 
         pageFlip.destroy();
+
+        loadSheet(document.getElementById('editor').innerHTML);
         window.print();
     });
     
     $('#song-title').innerHTML = ourSong.Title;
 
-    pageFlip.loadFromHTML(pages);
+    //pageFlip.loadFromHTML(pages);
     $(".chord-sheet").keydown(function (event) {
 
         if (event.keyCode == 8){

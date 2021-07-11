@@ -46,6 +46,9 @@
         div.chord-sheet{
             /* width:100%; */
         }
+        nav{
+            display:none;
+        }
     }
     div.chords{
     }
