@@ -48,8 +48,6 @@ function tabify(songText){
     return secondReplace;
 }
 
-
-
 function dropHandler(evt) {
     evt.stopPropagation();
     evt.preventDefault();
